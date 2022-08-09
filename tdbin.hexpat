@@ -34,7 +34,7 @@ namespace tdbin {
 	} [[static, single_color, format("tdbin::transform_str")]];
 	fn transform_str(transform_t transform) {
 		return std::format(
-			"Transform({}, {})",
+			"Transform({:s}, {:s})",
 			tdbin::vec_str(transform.pos),
 			tdbin::quat_str(transform.rot)
 		);
@@ -152,11 +152,7 @@ namespace tdbin {
 		char value[];
 	} [[format("tdbin::tag_str")]];
 	fn tag_str(tag_t tag) {
-		return std::format(
-			"'{}' = '{}'",
-			tag.key,
-			tag.value // Don't ask me why it doesn't work properly, because I don't know.
-		);
+		return std::format("'{:s}' = '{:s}'", tag.key, tag.value);
 	};
 	using entity_handle_t = u32;
 	enum entity_type_t: u8 {
@@ -238,7 +234,7 @@ namespace tdbin {
 		if (pair.key_type == entity_script_value_type_t::boolean) {
 			key = pair.key == true ? "[true]" : "[false]";
 		} else if (pair.key_type == entity_script_value_type_t::number) {
-			key = std::format("[{:.3f}]", pair.key);
+			key = std::format("[{:.3g}]", pair.key);
 		} else if (pair.key_type == entity_script_value_type_t::string) {
 			key = std::format("[\"{}\"]", pair.key);
 		} else if (pair.key_type == entity_script_value_type_t::table) {
@@ -252,7 +248,7 @@ namespace tdbin {
 		if (pair.value_type == entity_script_value_type_t::boolean) {
 			value = pair.value == true ? "true" : "false";
 		} else if (pair.value_type == entity_script_value_type_t::number) {
-			value = std::format("{:.3f}", pair.value);
+			value = std::format("{:.3g}", pair.value);
 		} else if (pair.value_type == entity_script_value_type_t::string) {
 			value = std::format("\"{}\"", pair.value);
 		} else if (pair.value_type == entity_script_value_type_t::table) {
@@ -470,26 +466,24 @@ namespace tdbin {
 			float last_update;
 			float time;
 			padding[4];
-			//std::print("Reading script environment at {:#x}", $);
 			entity_script_table_t environment;
 			u32 handle_count;
-			//std::print("Script handle count: {} (at {:#x})", handle_count, $);
 			u32 handles[handle_count];
 			u32 sound_count;
-			//std::print("Script sound count: {} (at {:#x})", sound_count, $);
 			entity_script_sound_t sounds[sound_count];
 			u32 transition_count;
-			//std::print("Script transition count: {} (at {:#x})", transition_count, $);
 			entity_script_transition_t transitions[transition_count];
 		} else {
 			std::error(std::format("Unknown entity type {:#04x}", type));
 		}
 		u32 child_count;
-		//std::print("Child count: {}", child_count);
 		entity_t children[child_count];
 		u32 pad;
 		std::assert(pad == 0xbeefbeef, "Bad entity padding");
-	};
+	}/* [[format("tdbin::entity_str")]];
+	fn entity_str(entity_t entity) {
+		return std::format("{:d} <{}>", entity.handle, entity.type);
+	}*/;
 	struct tdbin_t {
 		char magic[5];
 		std::assert(magic == "TDBIN", "Bad magic");
@@ -517,7 +511,6 @@ namespace tdbin {
 		u32 registry_count;
 		tag_t registry[registry_count];
 		u32 entity_count;
-		//entity_t entities[std::math::min(entity_count, 2)];
 		entity_t entities[entity_count];
 	};
 }
