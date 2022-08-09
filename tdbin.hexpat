@@ -478,12 +478,12 @@ namespace tdbin {
 		}
 		u32 child_count;
 		entity_t children[child_count];
-		u32 pad;
+		u32 pad [[hidden]];
 		std::assert(pad == 0xbeefbeef, "Bad entity padding");
-	}/* [[format("tdbin::entity_str")]];
+	} [[format("tdbin::entity_str")]];
 	fn entity_str(entity_t entity) {
 		return std::format("{:d} <{}>", entity.handle, entity.type);
-	}*/;
+	};
 	struct tdbin_t {
 		char magic[5];
 		std::assert(magic == "TDBIN", "Bad magic");
