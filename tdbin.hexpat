@@ -1,5 +1,5 @@
 #pragma endian little
-#pragma pattern_limit 0x100000
+#pragma pattern_limit 0x35000
 #include <std/string.pat>
 #include <std/math.pat>
 #include <std/sys.pat>
