@@ -114,7 +114,7 @@ namespace tdbin {
 	} [[static, format("tdbin::boundary_vertex_str")]];
 	fn boundary_vertex_str(boundary_vertex_t boundary_vertex) {
 		return std::format(
-			"{{{:.3g}, {:.3g}}}",
+			"<vertex pos=\"{:.3g} {:.3g}\"/>",
 			boundary_vertex.x, boundary_vertex.z
 		);
 	};
