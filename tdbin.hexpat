@@ -5,6 +5,9 @@
 #include <std/sys.pat>
 #include <std/mem.pat>
 namespace tdbin {
+	u32 maximum_entities in;
+	u32 total_entity_count out;
+	u32 maximum_boundary_vertices in;
 	struct vec_t {
 		float x [[color("ff0000")]];
 		float y [[color("00ff00")]];
@@ -71,10 +74,10 @@ namespace tdbin {
 		color_t skybox_tint;
 		float skybox_brightness;
 		float skybox_rotation;
-		vec_t sun_brightness;
+		vec_t sun_tint_brightness;
 		color_t sun_color_tint;
 		vec_t sun_direction;
-		float brightness;
+		float sun_brightness;
 		float sun_spread;
 		float sun_length;
 		float sun_fog_scale;
@@ -108,19 +111,29 @@ namespace tdbin {
 		vec_t wind_direction;
 		float water_hurt;
 	};
-	struct boundary_vertex_t {
+	struct vertex_t {
 		float x [[color("ff0000")]];
 		float z [[color("0000ff")]];
-	} [[static, format("tdbin::boundary_vertex_str")]];
-	fn boundary_vertex_str(boundary_vertex_t boundary_vertex) {
+	} [[static, format("tdbin::vertex_str")]];
+	fn vertex_str(vertex_t vertex) {
 		return std::format(
 			"<vertex pos=\"{:.3g} {:.3g}\"/>",
-			boundary_vertex.x, boundary_vertex.z
+			vertex.x, vertex.z
 		);
 	};
-	struct boundary_t {
+	struct vertices_t {
 		u32 vertex_count;
-		boundary_vertex_t vertices[vertex_count];
+		vertex_t vertices[vertex_count];
+	} [[inline]];
+	struct boundary_t {
+		if (maximum_boundary_vertices == 0) {
+			vertices_t vertices;
+		} else {
+			u32 vertex_count;
+			if (vertex_count > maximum_boundary_vertices) {
+				std::error(std::format("Boundary vertex count of {:d} exceeds limit of {:d}.", vertex_count, maximum_boundary_vertices));
+			}
+		}
 		float pad_left;
 		float pad_top;
 		float pad_right;
@@ -278,6 +291,10 @@ namespace tdbin {
 		padding[4];
 	};
 	struct entity_t {
+		total_entity_count += 1;
+		if (maximum_entities != 0 && total_entity_count > maximum_entities) {
+			std::error("Exceeded entity limit of {:d}.");
+		}
 		entity_type_t type;
 		entity_handle_t handle;
 		u8 tag_count;
@@ -346,8 +363,7 @@ namespace tdbin {
 			float motion;
 			float foam;
 			color_t color;
-			u32 vertex_count;
-			boundary_vertex_t vertices[vertex_count];
+			vertices_t vertices;
 		} else if (type == entity_type_t::joint) {
 			entity_joint_type_t joint_type;
 			entity_handle_t shape_a;
@@ -452,8 +468,7 @@ namespace tdbin {
 			float sphere_size;
 			vec_t box_size;
 			float polygon_size;
-			u32 vertex_count;
-			boundary_vertex_t vertices[vertex_count];
+			vertices_t vertices;
 			char sound[];
 			float soundramp;
 			padding[1];
@@ -510,6 +525,7 @@ namespace tdbin {
 		palette_t palettes[palette_count];
 		u32 registry_count;
 		tag_t registry[registry_count];
+		total_entity_count = 0;
 		u32 entity_count;
 		entity_t entities[entity_count];
 	};
