@@ -8,6 +8,7 @@ namespace tdbin {
 	u32 maximum_entities in;
 	u32 total_entity_count out;
 	u32 maximum_boundary_vertices in;
+	u24 game_version;
 	struct vec_t {
 		float x [[color("ff0000")]];
 		float y [[color("00ff00")]];
@@ -297,6 +298,8 @@ namespace tdbin {
 		}
 		entity_type_t type;
 		entity_handle_t handle;
+		std::print("Parsing entity...");
+		std::print("Parsing entity with handle {:d} of type {:#04x}...", handle, type);
 		u8 tag_count;
 		tag_t tags[tag_count];
 		char description[];
@@ -503,6 +506,7 @@ namespace tdbin {
 		char magic[5];
 		std::assert(magic == "TDBIN", "Bad magic");
 		be u24 version;
+		game_version = version;
 		std::print(
 			"TDBIN {:d}.{:d}.{:d}",
 			(version & 0xff0000) >> 16,
@@ -510,12 +514,13 @@ namespace tdbin {
 			version & 0xff
 		);
 		char level[];
-		padding[4];
+		padding[4*8];
 		vec_t shadow_volume;
 		transform_t spawnpoint;
 		padding[4*3];
 		if (version >= 0x010100) padding[4];
 		if (version >= 0x010000) postprocessing_t postprocessing;
+		if (version <= 0x000905) padding[4];
 		player_t player;
 		environment_t environment;
 		boundary_t boundary;
