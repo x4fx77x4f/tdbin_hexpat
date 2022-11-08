@@ -298,8 +298,7 @@ namespace tdbin {
 		}
 		entity_type_t type;
 		entity_handle_t handle;
-		std::print("Parsing entity...");
-		std::print("Parsing entity with handle {:d} of type {:#04x}...", handle, type);
+		std::print("Parsing entity with handle {:d} of type {}...", handle, type);
 		u8 tag_count;
 		tag_t tags[tag_count];
 		char description[];
@@ -492,10 +491,12 @@ namespace tdbin {
 			u32 transition_count;
 			entity_script_transition_t transitions[transition_count];
 		} else {
-			std::error(std::format("Unknown entity type {:#04x}", type));
+			std::error(std::format("Unknown entity type {}", type));
 		}
 		u32 child_count;
-		entity_t children[child_count];
+		if (child_count > 0) {
+			entity_t children[child_count];
+		}
 		u32 pad [[hidden]];
 		std::assert(pad == 0xbeefbeef, "Bad entity padding");
 	} [[format("tdbin::entity_str")]];
@@ -514,7 +515,7 @@ namespace tdbin {
 			version & 0xff
 		);
 		char level[];
-		padding[4*8];
+		padding[4];
 		vec_t shadow_volume;
 		transform_t spawnpoint;
 		padding[4*3];
