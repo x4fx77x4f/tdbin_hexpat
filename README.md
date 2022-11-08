@@ -1,11 +1,13 @@
 # tdbin.hexpat
-Parser and semantic highlighter for the proprietary TDBIN format used in [Teardown](https://store.steampowered.com/app/1167630/Teardown/).
+Parser written in [the Pattern Language](https://imhex.werwolv.net/docs/) for the proprietary TDBIN format used in [Teardown](https://store.steampowered.com/app/1167630/Teardown/).
 
 ## Usage
 1. Install [ImHex](https://imhex.werwolv.net/).
-2. Open your TDBIN file(s) in ImHex. **The levels in `data/bin/` are compressed and must first be decompressed for it to work with this script.**
-3. For each one, go to "File"->"Load pattern..."->"Browse..." and load [`tdbin.hexpat`](tdbin.hexpat).
-4. Click the play button under "Console" under "Pattern editor".
+2. Decompress your TDBIN file with `zlib-flate -uncompress < foo.bin > bar.bin` if it's a base game level in `data/bin/`. (`quicksave.bin` isn't compressed.)
+3. Open your TDBIN file(s) in ImHex.
+4. For each one, go to "File"->"Load pattern..."->"Browse..." and load [`tdbin.hexpat`](tdbin.hexpat).
+5. Click the play button under "Console" under "Pattern editor".
+6. Look through the parsed data in "Pattern Data".
 
 ## License
 Copyright (c) 2022 x4fx77x4f
