@@ -287,6 +287,24 @@ struct entity_t {
 	entity_t children[child_count];
 	u32 pad;
 	std::assert(pad == 0xbeefbeef, "bad entity pad");
+} [[format("entity_str")]];
+fn entity_str(entity_t entity) {
+	str type_str;
+	match (entity.type_raw) {
+		(entity_type_t::body): type_str = "body";
+		(entity_type_t::shape): type_str = "shape";
+		(entity_type_t::light): type_str = "light";
+		(entity_type_t::location): type_str = "location";
+		(entity_type_t::water): type_str = "water";
+		(entity_type_t::enemy): type_str = "enemy";
+		(entity_type_t::joint): type_str = "joint";
+		(entity_type_t::vehicle): type_str = "vehicle";
+		(entity_type_t::wheel): type_str = "wheel";
+		(entity_type_t::screen): type_str = "screen";
+		(entity_type_t::trigger): type_str = "trigger";
+		(entity_type_t::script): type_str = "script";
+	}
+	return std::format("{:d} [{:s}]", entity.handle, type_str);
 };
 using entity_flags_t;
 struct entity_body_t {
