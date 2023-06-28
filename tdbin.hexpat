@@ -76,7 +76,14 @@ struct tdbin_t {
 	pair_t registry[pair_count];
 	u32 entity_count;
 	entity_t entities[entity_count];
-	//std::assert($ == std::mem::size(), "bad tdbin");
+	if (tdbin_version >= 0x000500) {
+		u32 unknown_22;
+		u8 unknown_23[4];
+		if (tdbin_version >= 0x000702) {
+			u8 unknown_24[5];
+		}
+	}
+	std::assert($ == std::mem::size(), "bad tdbin");
 };
 struct postprocessing_t {
 	float brightness;
