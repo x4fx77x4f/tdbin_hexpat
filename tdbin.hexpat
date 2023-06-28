@@ -337,8 +337,44 @@ struct entity_shape_t {
 		u8 unknown_16;
 	}
 };
+enum entity_light_type_t : u8 {
+	sphere = 0x01,
+	capsule,
+	cone,
+	area,
+};
 struct entity_light_t {
-	std::error("entity type light not implemented");
+	u8 enabled;
+	u8 type_raw;
+	u8 type = type_raw;
+	if (tdbin_version < 0x000700 && type >= entity_light_type_t::capsule) {
+		type += 1;
+	}
+	transform_t transform;
+	float color_r;
+	float color_g;
+	float color_b;
+	float color_a;
+	if (tdbin_version >= 0x000500) {
+		float scale;
+	}
+	float reach;
+	float size;
+	float unshadowed;
+	float angle;
+	float penumbra;
+	float fog_iter;
+	float fog_scale;
+	float area_size_x;
+	float area_size_z;
+	if (tdbin_version >= 0x000700) {
+		float capsule_size;
+	}
+	u8 unknown_20[13];
+	float unknown_21;
+	char sound_path[];
+	float sound_volume;
+	float glare;
 };
 struct entity_location_t {
 	entity_flags_t flags;
@@ -410,7 +446,7 @@ struct entity_script_t {
 enum entity_script_value_type_t : u32 {
 	nil,
 	boolean,
-	number,
+	number = 3,
 	string,
 	table,
 	reference = 0xfffffffb,
@@ -430,13 +466,13 @@ struct entity_script_pair_t {
 struct entity_script_value_t {
 	entity_script_value_type_t type;
 	match (type) {
-		//(entity_script_value_type_t::nil):
+		(entity_script_value_type_t::nil): padding[0];
 		(entity_script_value_type_t::boolean): u8 value;
 		(entity_script_value_type_t::number): double value;
 		(entity_script_value_type_t::string): char value[];
 		(entity_script_value_type_t::table): entity_script_table_t value;
 		(entity_script_value_type_t::reference): u32 value;
-		(_): std::error("bad type");
+		(_): std::error(std::format("bad type {} at 0x{:x}", type, $));
 	}
 } [[inline]];
 struct entity_script_sound_t {
