@@ -1,6 +1,7 @@
 #pragma endian little
 #include <std/mem.pat>
 #include <std/io.pat>
+#include <std/sys.pat>
 u24 tdbin_version = 0;
 struct vec_t {
 	float x;
@@ -33,7 +34,8 @@ using environment_t;
 using boundary_t;
 using fire_t;
 using palette_t;
-using registry_node_t;
+using pair_t;
+using entity_t;
 struct tdbin_t {
 	if (std::mem::read_string($, 5) == "TDBIN") {
 		char magic[5];
@@ -70,8 +72,11 @@ struct tdbin_t {
 	fire_t fires[fire_count];
 	u32 palette_count;
 	palette_t palettes[palette_count];
-	u32 registry_node_count;
-	registry_node_t registry[registry_node_count];
+	u32 pair_count;
+	pair_t registry[pair_count];
+	u32 entity_count;
+	entity_t entities[entity_count];
+	//std::assert($ == std::mem::size(), "bad tdbin");
 };
 struct postprocessing_t {
 	float brightness;
@@ -221,11 +226,100 @@ struct palette_material_t {
 	float emissive;
 	u8 replaceable;
 } [[static]];
-struct registry_node_t {
+struct pair_t {
 	char key[];
 	char value[];
-} [[format("registry_node_str")]];
-fn registry_node_str(registry_node_t node) {
+} [[format("pair_str")]];
+fn pair_str(pair_t node) {
 	return std::format("[\"{:s}\"]=\"{:s}\",", node.key, node.value);
+};
+enum entity_type_t : u8 {
+	body = 0x01,
+	shape,
+	light,
+	location,
+	water,
+	enemy,
+	joint,
+	vehicle,
+	wheel,
+	screen,
+	trigger,
+	script,
+};
+using entity_body_t;
+using entity_shape_t;
+using entity_light_t;
+using entity_location_t;
+using entity_water_t;
+using entity_enemy_t;
+using entity_joint_t;
+using entity_vehicle_t;
+using entity_wheel_t;
+using entity_screen_t;
+using entity_trigger_t;
+using entity_script_t;
+struct entity_t {
+	u8 type_raw;
+	u8 type = type_raw;
+	if (tdbin_version >= 0x000906 && type >= entity_type_t::enemy) {
+		type += 1;
+	}
+	entity_handle_t handle;
+	u8 tag_count;
+	pair_t tags[tag_count];
+	char description[];
+	match (type) {
+		(entity_type_t::body): entity_body_t entity;
+		(entity_type_t::shape): entity_shape_t entity;
+		(entity_type_t::light): entity_light_t entity;
+		(entity_type_t::location): entity_location_t entity;
+		(entity_type_t::water): entity_water_t entity;
+		(entity_type_t::enemy): entity_enemy_t entity;
+		(entity_type_t::joint): entity_joint_t entity;
+		(entity_type_t::vehicle): entity_vehicle_t entity;
+		(entity_type_t::wheel): entity_wheel_t entity;
+		(entity_type_t::screen): entity_screen_t entity;
+		(entity_type_t::trigger): entity_trigger_t entity;
+		(entity_type_t::script): entity_script_t entity;
+	}
+	u32 pad;
+	std::assert(pad == 0xbeefbeef, "bad entity pad");
+};
+struct entity_body_t {
+	std::error("entity type body not implemented");
+};
+struct entity_shape_t {
+	std::error("entity type shape not implemented");
+};
+struct entity_light_t {
+	std::error("entity type light not implemented");
+};
+struct entity_location_t {
+	std::error("entity type location not implemented");
+};
+struct entity_water_t {
+	std::error("entity type water not implemented");
+};
+struct entity_enemy_t {
+	std::error("entity type enemy not implemented");
+};
+struct entity_joint_t {
+	std::error("entity type joint not implemented");
+};
+struct entity_vehicle_t {
+	std::error("entity type vehicle not implemented");
+};
+struct entity_wheel_t {
+	std::error("entity type wheel not implemented");
+};
+struct entity_screen_t {
+	std::error("entity type screen not implemented");
+};
+struct entity_trigger_t {
+	std::error("entity type trigger not implemented");
+};
+struct entity_screen_t {
+	std::error("entity type screen not implemented");
 };
 tdbin_t tdbin @ 0;
