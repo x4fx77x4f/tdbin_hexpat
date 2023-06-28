@@ -381,8 +381,73 @@ struct entity_screen_t {
 struct entity_trigger_t {
 	std::error("entity type trigger not implemented");
 };
+using entity_script_table_t;
+using entity_script_sound_t;
+using entity_script_transition_t;
 struct entity_script_t {
-	std::error("entity type script not implemented");
+	entity_flags_t flags;
+	char path[];
+	u32 parameter_count;
+	pair_t parameters[parameter_count];
+	float last_update;
+	float time;
+	u32 unknown_17;
+	entity_script_table_t environment;
+	if (tdbin_version < 0x000500) {
+		u32 unknown_18_count;
+		u32 unknown_18[unknown_18_count];
+	}
+	u32 handle_count;
+	entity_handle_t handles[handle_count];
+	u32 sound_count;
+	entity_script_sound_t sounds[sound_count];
+	if (tdbin_version >= 0x000704) {
+		u32 transition_count;
+		entity_script_transition_t transitions[transition_count];
+	}
+};
+enum entity_script_value_type_t : u32 {
+	nil,
+	boolean,
+	number,
+	string,
+	table,
+	reference = 0xfffffffb,
+};
+using entity_script_pair_t;
+struct entity_script_table_t {
+	entity_script_pair_t table[while (
+		std::mem::read_unsigned($, 4) != entity_script_value_type_t::nil
+	)];
+	entity_script_value_type_t end_of_table_marker;
+};
+using entity_script_value_t;
+struct entity_script_pair_t {
+	entity_script_value_t key;
+	entity_script_value_t value;
+};
+struct entity_script_value_t {
+	entity_script_value_type_t type;
+	match (type) {
+		//(entity_script_value_type_t::nil):
+		(entity_script_value_type_t::boolean): u8 value;
+		(entity_script_value_type_t::number): double value;
+		(entity_script_value_type_t::string): char value[];
+		(entity_script_value_type_t::table): entity_script_table_t value;
+		(entity_script_value_type_t::reference): u32 value;
+		(_): std::error("bad type");
+	}
+} [[inline]];
+struct entity_script_sound_t {
+	u32 type;
+	char path[];
+};
+struct entity_script_transition_t {
+	char key[];
+	u8 type;
+	float transition_time; // ?
+	double time; // ?
+	u8 unknown_19[4];
 };
 struct entity_flags_t {
 	if (tdbin_version >= 0x000902) {
