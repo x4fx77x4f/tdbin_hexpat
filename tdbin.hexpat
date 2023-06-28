@@ -301,7 +301,41 @@ struct entity_body_t {
 	u8 body_flags;
 };
 struct entity_shape_t {
-	std::error("entity type shape not implemented");
+	entity_flags_t flags;
+	transform_t transform;
+	u16 shape_flags;
+	u8 collision_layer;
+	u8 collision_mask;
+	float density;
+	float strength;
+	if (tdbin_version >= 0x000900) {
+		u16 texture_tile;
+		u16 blendtexture_tile;
+		float texture_weight;
+		float blendtexture_weight;
+		vec_t starting_world_position; // ?
+	} else {
+		u32 texture_tile;
+		vec_t starting_world_position; // ?
+		float texture_weight;
+	}
+	float unknown_12;
+	u8 unknown_13;
+	u8 unknown_14;
+	u32 sx;
+	u32 sy;
+	u32 sz;
+	if (sx*sy*sz > 0) {
+		u32 length;
+		std::assert(length%2 == 0, "bad shape length");
+		$ += length;
+	}
+	u32 palette;
+	float scale;
+	u32 unknown_15[2];
+	if (tdbin_version >= 0x000700) {
+		u8 unknown_16;
+	}
 };
 struct entity_light_t {
 	std::error("entity type light not implemented");
@@ -347,8 +381,8 @@ struct entity_screen_t {
 struct entity_trigger_t {
 	std::error("entity type trigger not implemented");
 };
-struct entity_screen_t {
-	std::error("entity type screen not implemented");
+struct entity_script_t {
+	std::error("entity type script not implemented");
 };
 struct entity_flags_t {
 	if (tdbin_version >= 0x000902) {
