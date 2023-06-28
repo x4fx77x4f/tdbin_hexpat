@@ -288,8 +288,17 @@ struct entity_t {
 	u32 pad;
 	std::assert(pad == 0xbeefbeef, "bad entity pad");
 };
+using entity_flags_t;
 struct entity_body_t {
-	std::error("entity type body not implemented");
+	entity_flags_t flags;
+	transform_t transform;
+	vec_t velocity;
+	float angular_velocity[3];
+	u8 dynamic;
+	if (tdbin_version < 0x000900) {
+		u8 unknown_11;
+	}
+	u8 body_flags;
 };
 struct entity_shape_t {
 	std::error("entity type shape not implemented");
@@ -301,11 +310,7 @@ struct entity_location_t {
 	std::error("entity type location not implemented");
 };
 struct entity_water_t {
-	if (tdbin_version >= 0x000902) {
-		u16 flags;
-	} else {
-		u8 flags;
-	}
+	entity_flags_t flags;
 	transform_t transform;
 	float depth;
 	float wave;
@@ -323,7 +328,6 @@ struct entity_water_t {
 	}
 	u32 vertex_count;
 	vertex_t vertices[vertex_count];
-	std::print("0x{:x}", $);
 };
 struct entity_enemy_t {
 	std::error("entity type enemy not implemented");
@@ -346,4 +350,11 @@ struct entity_trigger_t {
 struct entity_screen_t {
 	std::error("entity type screen not implemented");
 };
+struct entity_flags_t {
+	if (tdbin_version >= 0x000902) {
+		u16 flags;
+	} else {
+		u8 flags;
+	}
+} [[inline]];
 tdbin_t tdbin @ 0;
