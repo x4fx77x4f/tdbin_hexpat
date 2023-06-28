@@ -341,7 +341,8 @@ struct entity_light_t {
 	std::error("entity type light not implemented");
 };
 struct entity_location_t {
-	std::error("entity type location not implemented");
+	entity_flags_t flags;
+	transform_t transform;
 };
 struct entity_water_t {
 	entity_flags_t flags;
