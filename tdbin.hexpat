@@ -68,7 +68,7 @@ struct tdbin_t {
 	u32 fire_count;
 	fire_t fires[fire_count];
 	u32 palette_count;
-	//palette_t palettes[palette_count];
+	palette_t palettes[palette_count];
 };
 struct postprocessing_t {
 	float brightness;
@@ -198,14 +198,14 @@ struct fire_t {
 	float max_time;
 	float time;
 	u8 unknown_9[6];
-};
+} [[static]];
 using palette_material_t;
 struct palette_t {
 	palette_material_t materials[256];
 	u8 unknown_10;
 	u8 tint_black[4*256];
 	u8 tint_yellow[4*256];
-};
+} [[static]];
 struct palette_material_t {
 	u8 kind;
 	float r;
@@ -217,5 +217,5 @@ struct palette_material_t {
 	float metalness;
 	float emissive;
 	u8 replaceable;
-};
+} [[static]];
 tdbin_t tdbin @ 0;
