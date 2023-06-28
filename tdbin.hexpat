@@ -182,10 +182,10 @@ struct environment_t {
 		u8 unknown_8;
 	}
 };
-using boundary_vertex_t;
+using vertex_t;
 struct boundary_t {
 	u32 vertex_count;
-	boundary_vertex_t vertices[vertex_count];
+	vertex_t vertices[vertex_count];
 	if (tdbin_version >= 0x000900) {
 		float pad_left;
 		float pad_top;
@@ -193,11 +193,11 @@ struct boundary_t {
 		float pad_bottom;
 	}
 };
-struct boundary_vertex_t {
+struct vertex_t {
 	float x;
 	float z;
-} [[static, format("boundary_vertex_str")]];
-fn boundary_vertex_str(boundary_vertex_t vertex) {
+} [[static, format("vertex_str")]];
+fn vertex_str(vertex_t vertex) {
 	return std::format("{:.3g} {:.3g}", vertex.x, vertex.z);
 };
 struct fire_t {
@@ -283,6 +283,8 @@ struct entity_t {
 		(entity_type_t::trigger): entity_trigger_t entity;
 		(entity_type_t::script): entity_script_t entity;
 	}
+	u32 child_count;
+	entity_t children[child_count];
 	u32 pad;
 	std::assert(pad == 0xbeefbeef, "bad entity pad");
 };
@@ -299,7 +301,29 @@ struct entity_location_t {
 	std::error("entity type location not implemented");
 };
 struct entity_water_t {
-	std::error("entity type water not implemented");
+	if (tdbin_version >= 0x000902) {
+		u16 flags;
+	} else {
+		u8 flags;
+	}
+	transform_t transform;
+	float depth;
+	float wave;
+	float ripple;
+	float motion;
+	float foam;
+	if (tdbin_version >= 0x000900) {
+		float color_r;
+		float color_g;
+		float color_b;
+		float color_a;
+	}
+	if (tdbin_version >= 0x010400) {
+		float visibility;
+	}
+	u32 vertex_count;
+	vertex_t vertices[vertex_count];
+	std::print("0x{:x}", $);
 };
 struct entity_enemy_t {
 	std::error("entity type enemy not implemented");
