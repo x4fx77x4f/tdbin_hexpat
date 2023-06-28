@@ -33,6 +33,7 @@ using environment_t;
 using boundary_t;
 using fire_t;
 using palette_t;
+using registry_node_t;
 struct tdbin_t {
 	if (std::mem::read_string($, 5) == "TDBIN") {
 		char magic[5];
@@ -69,6 +70,8 @@ struct tdbin_t {
 	fire_t fires[fire_count];
 	u32 palette_count;
 	palette_t palettes[palette_count];
+	u32 registry_node_count;
+	registry_node_t registry[registry_node_count];
 };
 struct postprocessing_t {
 	float brightness;
@@ -218,4 +221,11 @@ struct palette_material_t {
 	float emissive;
 	u8 replaceable;
 } [[static]];
+struct registry_node_t {
+	char key[];
+	char value[];
+} [[format("registry_node_str")]];
+fn registry_node_str(registry_node_t node) {
+	return std::format("[\"{:s}\"]=\"{:s}\",", node.key, node.value);
+};
 tdbin_t tdbin @ 0;
