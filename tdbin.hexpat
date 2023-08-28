@@ -566,8 +566,24 @@ struct entity_wheel_t {
 struct entity_screen_t {
 	std::error("entity type screen not implemented");
 };
+enum entity_trigger_type_t : u32 {
+	sphere = 1,
+	box,
+	polygon,
+};
 struct entity_trigger_t {
-	std::error("entity type trigger not implemented");
+	entity_flags_t flags;
+	transform_t transform;
+	entity_trigger_type_t type;
+	float sphere_size;
+	vec_t box_size;
+	float polygon_size;
+	u32 vertex_count;
+	vertex_t vertices[vertex_count] [[static]];
+	char sound[];
+	float sound_ramp;
+	u8 unknown_43;
+	float volume;
 };
 using entity_script_table_t;
 using entity_script_sound_t;
