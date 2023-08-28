@@ -480,9 +480,67 @@ struct entity_joint_knot_t { // wtf is this?
 	vec_t from;
 	vec_t to;
 } [[static]];
+using entity_vehicle_exhaust_t;
+using entity_vehicle_vital_t;
 struct entity_vehicle_t {
-	std::error("entity type vehicle not implemented");
+	entity_flags_t flags;
+	entity_handle_t body;
+	transform_t transform;
+	vec_t velocity;
+	vec_t angular_velocity; // TODO: euler angles type
+	float unknown_32;
+	u32 wheel_count;
+	entity_handle_t wheels[wheel_count] [[static]];
+	float top_speed;
+	float unknown_33;
+	float spring;
+	float damping;
+	float acceleration;
+	float strength;
+	float friction;
+	float unknown_34;
+	u8 handbrake;
+	float antispin;
+	float steerassist;
+	float unknown_35;
+	float antiroll;
+	char sound[];
+	float pitch;
+	vec_t camera;
+	vec_t player;
+	vec_t exit;
+	vec_t propeller;
+	float difflock;
+	float boat_sink;
+	u32 voxel_count;
+	if (tdbin_version > 0x000300) {
+		u8 unknown_36;
+		float drivable;
+	}
+	u32 ref_count; // wtf is this?
+	u32 refs[ref_count] [[static]];
+	u32 exhaust_count;
+	entity_vehicle_exhaust_t exhausts[exhaust_count] [[static]];
+	u32 vital_count;
+	entity_vehicle_vital_t vitals[vital_count] [[static]];
+	float unknown_38;
+	if (tdbin_version >= 0x000900) {
+		u8 unknown_39;
+		float broken_threshold;
+	}
 };
+struct entity_vehicle_exhaust_t {
+	transform_t transform;
+	if (tdbin_version >= 0x000700) {
+		float strength;
+	}
+} [[static]];
+struct entity_vehicle_vital_t {
+	u32 body;
+	vec_t pos;
+	float unknown_37;
+	u32 shape;
+} [[static]];
 struct entity_wheel_t {
 	std::error("entity type wheel not implemented");
 };
