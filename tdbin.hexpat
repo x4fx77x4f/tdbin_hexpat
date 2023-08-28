@@ -2,6 +2,7 @@
 #include <std/mem.pat>
 #include <std/io.pat>
 #include <std/sys.pat>
+#pragma pattern_limit 200000
 u24 tdbin_version = 0;
 struct vec_t {
 	float x;
@@ -542,7 +543,25 @@ struct entity_vehicle_vital_t {
 	u32 shape;
 } [[static]];
 struct entity_wheel_t {
-	std::error("entity type wheel not implemented");
+	entity_flags_t flags;
+	entity_handle_t vehicle;
+	entity_handle_t vehicle_body;
+	entity_handle_t body;
+	entity_handle_t shape;
+	if (tdbin_version >= 0x010300) {
+		u8 unknown_40[17] [[static]];
+	}
+	transform_t transform;
+	transform_t empty_transform; // ?
+	float steer;
+	float drive;
+	float travel_min;
+	float travel_max;
+	float radius;
+	float width;
+	float angular_speed;
+	float unknown_41;
+	float unknown_42;
 };
 struct entity_screen_t {
 	std::error("entity type screen not implemented");
