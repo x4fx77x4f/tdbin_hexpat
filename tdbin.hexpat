@@ -428,9 +428,58 @@ struct entity_water_t {
 struct entity_enemy_t {
 	std::error("entity type enemy not implemented");
 };
-struct entity_joint_t {
-	std::error("entity type joint not implemented");
+enum entity_joint_type_t : u32 {
+	ball = 0x01,
+	hinge,
+	prismatic,
+	rope,
 };
+using entity_joint_knot_t;
+struct entity_joint_t {
+	u32 type_raw;
+	u32 type = type_raw;
+	entity_handle_t entities[2] [[static]];
+	vec_t positions[2] [[static]];
+	vec_t axes[2] [[static]]; // what are these?
+	u8 connected;
+	u8 collide;
+	float strength;
+	float spring;
+	quat_t rotation;
+	float limit_min;
+	float limit_max;
+	float unknown_25;
+	float unknown_26;
+	float size;
+	if (tdbin_version >= 0x000900) {
+		u8 sound;
+	}
+	if (tdbin_version >= 0x000905) {
+		u8 autodisable; // ?
+	}
+	if (tdbin_version >= 0x000900) {
+		u32 unknown_27;
+		u32 unknown_28;
+	}
+	if (type == entity_joint_type_t::rope) {
+		float red;
+		float green;
+		float blue;
+		float alpha;
+		float unknown_29;
+		float rope_strength;
+		float max_stretch;
+		float slack;
+		float unknown_30;
+		u8 unknown_31;
+		u32 knot_count;
+		entity_joint_knot_t knots[knot_count];
+	}
+};
+struct entity_joint_knot_t { // wtf is this?
+	vec_t from;
+	vec_t to;
+} [[static]];
 struct entity_vehicle_t {
 	std::error("entity type vehicle not implemented");
 };
