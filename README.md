@@ -14,10 +14,10 @@ Intended for use in [ImHex](https://imhex.werwolv.net/).
 6. Look through the parsed data under the "Pattern Data" or "Hex editor" tabs.
 
 ## Compatibility
-This should support every version from 0.4.5 to 1.4.0, and the performance test (0.3.0). I haven't added support for every entity type yet, and I can't load any of the larger levels because I run out of RAM. Patches don't make any changes to the binary level format (that I know of), so they don't affect compatibility.
+This should support every version from 0.3.0 to 1.4.0. I haven't added support for every entity type yet, and I can't load any of the larger levels because I run out of RAM. Patches don't make any changes to the binary level format (that I know of), so they don't affect compatibility.
 
 ## License
-Copyright (c) 2022 x4fx77x4f
+Copyright (c) 2023 x4fx77x4f
 
 This software is released under the GNU General Public License version 3. The license terms can be found in [the license file](LICENSE).
 
