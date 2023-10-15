@@ -298,7 +298,11 @@ struct entity_t {
 } [[format("entity_str")]];
 fn entity_str(entity_t entity) {
 	str type_str;
-	match (entity.type_raw) {
+	u8 type = entity.type_raw;
+	if (tdbin_version >= 0x000906 && type >= entity_type_t::enemy) {
+		type += 1;
+	}
+	match (type) {
 		(entity_type_t::body): type_str = "body";
 		(entity_type_t::shape): type_str = "shape";
 		(entity_type_t::light): type_str = "light";
