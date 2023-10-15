@@ -2,7 +2,7 @@
 #include <std/mem.pat>
 #include <std/io.pat>
 #include <std/sys.pat>
-#pragma pattern_limit 200000
+#pragma pattern_limit 500000
 u24 tdbin_version = 0;
 struct vec_t {
 	float x;
@@ -564,7 +564,21 @@ struct entity_wheel_t {
 	float unknown_42;
 };
 struct entity_screen_t {
-	std::error("entity type screen not implemented");
+	entity_flags_t flags;
+	transform_t transform;
+	float size_x;
+	float size_y;
+	float bulge;
+	u32 resolution_x;
+	u32 resolution_y;
+	char path[];
+	u8 enabled;
+	u8 interactive;
+	float emissive;
+	float fxraster;
+	float fxca;
+	float fxnoise;
+	float fxglitch;
 };
 enum entity_trigger_type_t : u32 {
 	sphere = 1,
